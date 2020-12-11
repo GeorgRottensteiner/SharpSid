@@ -347,9 +347,9 @@ namespace SharpSid
             }
         }
 
-        public State read_state()
+        public InternalState read_state()
         {
-            State state = new State();
+            InternalState state = new InternalState();
             int j = 0;
 
             WaveformGenerator wave = voice0.wave;
@@ -435,7 +435,7 @@ namespace SharpSid
             return state;
         }
 
-        public void write_state(State state)
+        public void write_state(InternalState state)
         {
             int i;
 

@@ -25,113 +25,110 @@ namespace TestPlayer
   /// </summary>
   public partial class MainWindow : Window
   {
-    private Player      player;
-    private SidTune tune;
+    private Player      _Player;
+
+
 
     public MainWindow()
     {
       InitializeComponent();
 
-      player = new Player();
-      tune = null;
+      _Player = new Player();
     }
+
+
 
     private void Window_Closed( object sender, EventArgs e )
     {
-      player.Dispose();
+      _Player.Dispose();
     }
+
+
 
     private void btn_play_Click( object sender, RoutedEventArgs e )
     {
-      if ( tune != null )
+      if ( _Player.State != State.PLAYING )
       {
-        if ( player.State != SID2Types.sid2_player_t.sid2_playing )
-        {
-          player.Start( tune );
-        }
+        _Player.Start();
       }
     }
+
+
 
     private void btn_stop_Click( object sender, RoutedEventArgs e )
     {
-      if ( tune != null )
-      {
-        player.Stop();
-      }
+      _Player.Stop();
     }
+
+
 
     private void btn_pause_Click( object sender, RoutedEventArgs e )
     {
-      if ( tune != null )
+      Mouse.OverrideCursor = Cursors.Wait;
+      if ( _Player.State == State.PAUSED )
+      {
+        _Player.Resume();
+      }
+      else
+      {
+        _Player.Pause();
+      }
+      Mouse.OverrideCursor = Cursors.Arrow;
+    }
+
+
+
+    private void btn_prev_Click( object sender, RoutedEventArgs e )
+    {
+      if ( _Player.TuneInfo.currentSong > 1 )
       {
         Mouse.OverrideCursor = Cursors.Wait;
-        if ( player.State == SID2Types.sid2_player_t.sid2_paused )
+
+        switch ( _Player.State )
         {
-          player.Resume();
+          case State.PLAYING:
+          case State.PAUSED:
+            _Player.Stop();
+            break;
         }
-        else
-        {
-          player.Pause();
-        }
+
+        sp_songInfo.DataContext = null;
+
+        _Player.Start( _Player.TuneInfo.currentSong - 1 );
+
+        sp_songInfo.DataContext = _Player.TuneInfo;
+
         Mouse.OverrideCursor = Cursors.Arrow;
       }
     }
 
-    private void btn_prev_Click( object sender, RoutedEventArgs e )
-    {
-      if ( tune != null )
-      {
-        if ( tune.Info.currentSong > 1 )
-        {
-          Mouse.OverrideCursor = Cursors.Wait;
 
-          switch ( player.State )
-          {
-            case SID2Types.sid2_player_t.sid2_playing:
-            case SID2Types.sid2_player_t.sid2_paused:
-              player.Stop();
-              break;
-          }
-
-          tune.Info.currentSong--;
-
-          sp_songInfo.DataContext = null;
-          sp_songInfo.DataContext = tune;
-
-          player.Start( tune, tune.Info.currentSong );
-
-          Mouse.OverrideCursor = Cursors.Arrow;
-        }
-      }
-    }
 
     private void btn_next_Click( object sender, RoutedEventArgs e )
     {
-      if ( tune != null )
+      if ( _Player.TuneInfo.currentSong < _Player.TuneInfo.songs )
       {
-        if ( tune.Info.currentSong < tune.Info.songs )
+        Mouse.OverrideCursor = Cursors.Wait;
+
+        switch ( _Player.State )
         {
-          Mouse.OverrideCursor = Cursors.Wait;
-
-          switch ( player.State )
-          {
-            case SID2Types.sid2_player_t.sid2_playing:
-            case SID2Types.sid2_player_t.sid2_paused:
-              player.Stop();
-              break;
-          }
-
-          tune.Info.currentSong++;
-
-          sp_songInfo.DataContext = null;
-          sp_songInfo.DataContext = tune;
-
-          player.Start( tune, tune.Info.currentSong );
-
-          Mouse.OverrideCursor = Cursors.Arrow;
+          case State.PLAYING:
+          case State.PAUSED:
+            _Player.Stop();
+            break;
         }
+
+        sp_songInfo.DataContext = null;
+
+        _Player.Start( _Player.TuneInfo.currentSong + 1 );
+
+        sp_songInfo.DataContext = _Player.TuneInfo;
+
+        Mouse.OverrideCursor = Cursors.Arrow;
       }
     }
+
+
 
     private void btn_loadFile_Click( object sender, RoutedEventArgs e )
     {
@@ -142,22 +139,22 @@ namespace TestPlayer
         {
           try
           {
-            if ( tune != null )
-            {
-              player.Stop();
-            }
+            _Player.Stop();
 
+              /*
             using ( FileStream file = new FileStream( tb_filename.Text, FileMode.Open, FileAccess.Read ) )
             {
-              tune = new SidTune( file );
+              _CurrentTune = new SidTune( file );
             }
 
-            if ( tune.StatusOk )
-            {
-              player.Start( tune );
+            if ( _CurrentTune.StatusOk )*/
 
-              grp_tune.DataContext = tune;
-              sp_songInfo.DataContext = tune;
+            if ( _Player.LoadSIDFromFile( tb_filename.Text ) )
+            {
+              _Player.Start();
+
+              grp_tune.DataContext = _Player.TuneInfo;
+              sp_songInfo.DataContext = _Player.TuneInfo;
             }
             else
             {
@@ -180,6 +177,8 @@ namespace TestPlayer
       }
     }
 
+
+
     private void btn_download_Click( object sender, RoutedEventArgs e )
     {
       try
@@ -187,10 +186,7 @@ namespace TestPlayer
         Mouse.OverrideCursor = Cursors.Wait;
         this.IsEnabled = false;
 
-        if ( tune != null )
-        {
-          player.Stop();
-        }
+        _Player.Stop();
 
         using ( WebClient client = new WebClient() )
         {
@@ -203,6 +199,8 @@ namespace TestPlayer
         MessageBox.Show( "Error downloading file" + Environment.NewLine + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error );
       }
     }
+
+
 
     private void client_OpenReadCompleted( object sender, OpenReadCompletedEventArgs e )
     {
@@ -221,19 +219,18 @@ namespace TestPlayer
             }
 
             mem.Position = 0;
-            tune = new SidTune( mem );
-          }
 
-          if ( tune.StatusOk )
-          {
-            player.Start( tune );
+            if ( _Player.LoadSIDFromStream( mem ) )
+            {
+              _Player.Start();
 
-            grp_tune.DataContext = tune;
-            sp_songInfo.DataContext = tune;
-          }
-          else
-          {
-            MessageBox.Show( "Error downloading file" + Environment.NewLine + "Unknown data format", "Error", MessageBoxButton.OK, MessageBoxImage.Error );
+              grp_tune.DataContext = _Player.TuneInfo;
+              sp_songInfo.DataContext = _Player.TuneInfo;
+            }
+            else
+            {
+              MessageBox.Show( "Error downloading file" + Environment.NewLine + "Unknown data format", "Error", MessageBoxButton.OK, MessageBoxImage.Error );
+            }
           }
         }
         else
@@ -247,6 +244,8 @@ namespace TestPlayer
       }
     }
 
+
+
     private void btn_open_Click( object sender, RoutedEventArgs e )
     {
       OpenFileDialog dlg = new OpenFileDialog();
@@ -258,5 +257,8 @@ namespace TestPlayer
         tb_filename.Text = dlg.FileName;
       }
     }
+
+
+
   }
 }

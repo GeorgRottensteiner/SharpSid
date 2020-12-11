@@ -7,7 +7,7 @@ namespace SharpSid
     /// 
     /// @author Ken Händel
     /// </summary>
-    public class State
+    public class InternalState
     {
         public char[] sid_register = new char[0x20];
 
@@ -34,7 +34,7 @@ namespace SharpSid
         public bool hold_zero0, hold_zero1, hold_zero2;
 
 
-        public State()
+        public InternalState()
         {
             int i;
 

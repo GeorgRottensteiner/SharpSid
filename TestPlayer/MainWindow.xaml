@@ -67,11 +67,11 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Emulation" TextAlignment="Right" VerticalAlignment="Center" Margin="8,8,4,0"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Info.SongEmulation}" VerticalAlignment="Center" Margin="0,8,8,0"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=SongEmulation}" VerticalAlignment="Center" Margin="0,8,8,0"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Info" TextAlignment="Right" VerticalAlignment="Center" Margin="8,8,4,0"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=Info.InfoString1}" VerticalAlignment="Center" Margin="0,8,8,0"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=Info.InfoString2}" VerticalAlignment="Center" Margin="0,4,8,0"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Path=Info.InfoString3}" VerticalAlignment="Center" Margin="0,4,8,0"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=InfoString1}" VerticalAlignment="Center" Margin="0,8,8,0"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=InfoString2}" VerticalAlignment="Center" Margin="0,4,8,0"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Path=InfoString3}" VerticalAlignment="Center" Margin="0,4,8,0"/>
             </Grid>
         </GroupBox>
 
@@ -96,9 +96,9 @@
 
         <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="16,8,8,8" Name="btn_prev" VerticalAlignment="Top" MinWidth="40" Content="9" FontFamily="Webdings" FontSize="16" Click="btn_prev_Click"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Name="sp_songInfo">
-            <TextBlock Text="{Binding Path=Info.currentSong}" TextAlignment="Right"/>
+            <TextBlock Text="{Binding Path=currentSong}" TextAlignment="Right"/>
             <TextBlock Text="/" Margin="4,0"/>
-            <TextBlock Text="{Binding Path=Info.songCount}" TextAlignment="Left"/>
+            <TextBlock Text="{Binding Path=songCount}" TextAlignment="Left"/>
         </StackPanel>
         <Button Grid.Row="2" Grid.Column="5" HorizontalAlignment="Left" Margin="8" Name="btn_next" VerticalAlignment="Top" MinWidth="40" Content=":" FontFamily="Webdings" FontSize="16" Click="btn_next_Click"/>
     </Grid>

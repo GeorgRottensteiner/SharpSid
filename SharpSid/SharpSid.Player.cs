@@ -23,8 +23,8 @@ namespace SharpSid
     private volatile Thread           _Thread = null;
     private volatile bool             _Aborting = false;
 
-    int                               _PlayBufferSize = 16384;
-    IntPtr                            _PlayBuffer = IntPtr.Zero;
+    private int                       _PlayBufferSize = 16384;
+    private IntPtr                    _PlayBuffer = IntPtr.Zero;
 
     private IWavePlayer               _WavePlayer;
     private BufferedWaveProvider      _BufferedWaveProvider;
@@ -37,6 +37,8 @@ namespace SharpSid
     private object                    _LockObj = new object();
 
     private InternalPlayer            _InternalPlayer;
+
+    private SidTune                   _CurrentTune = null;
 
 
 
@@ -104,18 +106,75 @@ namespace SharpSid
 
 
 
+    public bool LoadSIDFromFile( string Filename )
+    {
+      Stop();
+      try
+      {
+        using ( FileStream file = new FileStream( Filename, FileMode.Open, FileAccess.Read ) )
+        {
+          return LoadSIDFromStream( file );
+        }
+      }
+      catch ( Exception )
+      {
+        return false;
+      }
+    }
+
+
+
+    public bool LoadSIDFromStream( Stream mem )
+    {
+      Stop();
+
+      if ( mem == null )
+      {
+        return false;
+      }
+
+      _CurrentTune = new SidTune( mem );
+
+      return _CurrentTune.StatusOk;
+    }
+
+
+
     /// <summary>
     /// returns the current Status of the Player
     /// </summary>
-    public SID2Types.sid2_player_t State
+    public State State
     {
       get
       {
         if ( _InternalPlayer != null )
         {
-          return _InternalPlayer.State;
+          switch ( _InternalPlayer.State )
+          {
+            case SID2Types.sid2_player_t.sid2_paused:
+              return State.PAUSED;
+            case SID2Types.sid2_player_t.sid2_playing:
+              return State.PLAYING;
+            case SID2Types.sid2_player_t.sid2_stopped:
+            default:
+              return State.STOPPED;
+          }
         }
-        return SID2Types.sid2_player_t.sid2_stopped;
+        return State.STOPPED;
+      }
+    }
+
+
+
+    public SidTuneInfo TuneInfo
+    {
+      get
+      {
+        if ( _CurrentTune != null )
+        {
+          return _CurrentTune.Info;
+        }
+        return new SidTuneInfo();
       }
     }
 
@@ -125,9 +184,9 @@ namespace SharpSid
     ///  Start playing the tune with the default song
     /// </summary>
     /// <param name="tune">SidTune</param>
-    public void Start( SidTune tune )
+    public void Start()
     {
-      Start( tune, 0 );
+      Start( 0 );
     }
 
 
@@ -135,11 +194,14 @@ namespace SharpSid
     /// <summary>
     /// Start playing the tune with the selected song
     /// </summary>
-    /// <param name="tune">SidTune</param>
-    /// <param name="songNumber">song id (1..count), 0 = default song</param>
-    public void Start( SidTune tune, int songNumber )
+    /// <param name="SongNumber">song id (1..count), 0 = default song</param>
+    public void Start( int SongNumber )
     {
       if ( Stopping )
+      {
+        return;
+      }
+      if ( _CurrentTune == null )
       {
         return;
       }
@@ -159,7 +221,7 @@ namespace SharpSid
       config.frequency      = _Frequency;
       config.playback       = SID2Types.sid2_playback_t.sid2_mono;
       config.optimisation   = SID2Types.SID2_DEFAULT_OPTIMISATION;
-      config.sidModel       = (SID2Types.sid2_model_t)tune.Info.sidModel;
+      config.sidModel       = (SID2Types.sid2_model_t)_CurrentTune.Info.sidModel;
       config.clockDefault   = SID2Types.sid2_clock_t.SID2_CLOCK_CORRECT;
       config.clockSpeed     = SID2Types.sid2_clock_t.SID2_CLOCK_CORRECT;
       config.clockForced    = false;
@@ -172,16 +234,17 @@ namespace SharpSid
       config.precision      = SID2Types.SID2_DEFAULT_PRECISION;
       _InternalPlayer.config( config );
 
-      tune.selectSong( songNumber );
-      _InternalPlayer.load( tune );
+      _CurrentTune.selectSong( SongNumber );
+      _InternalPlayer.load( _CurrentTune );
 
-      _IsStereo = tune.isStereo;
+      _IsStereo = _CurrentTune.isStereo;
 
       _InternalPlayer.start();
 
       _Thread = new Thread( new ThreadStart( ThreadProc ) );
       _Thread.Start();
     }
+
 
 
     private void ThreadProc()
@@ -207,6 +270,11 @@ namespace SharpSid
     /// </summary>
     public void Stop()
     {
+      if ( _CurrentTune == null )
+      {
+        return;
+      }
+
       if ( Stopping )
       {
         return;

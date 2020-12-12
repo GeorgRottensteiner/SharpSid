@@ -108,6 +108,16 @@ namespace SharpSid
 
 
     /// <summary>
+    /// Create a blank sidtune instance (use for RAM injection)
+    /// </summary>
+    public SidTune()
+    {
+      init();
+    }
+
+
+
+    /// <summary>
     /// Load a sidtune from a file
     /// </summary>
     /// <param name="fileName"></param>
@@ -117,11 +127,16 @@ namespace SharpSid
       init();
       getFromFiles( stream );
     }
+
+
+
     // only used for deserializing
     public SidTune( BinaryReader reader )
     {
       LoadFromReader( reader );
     }
+
+
 
     /// <summary>
     /// Select sub-song (0 = default starting song) and return active song number
@@ -671,6 +686,48 @@ namespace SharpSid
         return (erg == 0) ? LoadStatus.LOAD_NOT_MINE : (erg == 1) ? LoadStatus.LOAD_OK : LoadStatus.LOAD_ERROR;
     }
     */
+
+
+
+    /// <summary>
+    /// Prepare cache for injected program
+    /// </summary>
+    /// <param name="Data"></param>
+    /// <param name="DataStartAddress"></param>
+    /// <returns></returns>
+    public bool InjectProgramInMemory( byte[] Data, int DataStartAddress )
+    {
+      info.songs = 1;
+      info.startSong = 1;
+
+      info.dataFileLen = Data.Length;
+      info.c64dataLen = Data.Length;
+
+      // Check the size of the data.
+      if ( info.c64dataLen > SIDTUNE_MAX_MEMORY )
+      {
+        //info.statusstring = txt_dataTooLong;
+        return false;
+      }
+      else if ( info.c64dataLen == 0 )
+      {
+        //info.statusstring = txt_empty;
+        return false;
+      }
+
+      short[]   weirdData = new short[Data.Length];
+      for ( int i = 0; i < Data.Length; ++i )
+      {
+        weirdData[i] = Data[i];
+      }
+
+      cache.assign( weirdData, weirdData.Length );
+
+      //info.statusstring = txt_noErrors;
+      return true;
+    }
+
+
 
     /// <summary>
     /// Cache the data of a single-file or two-file sidtune and its corresponding file names

@@ -232,6 +232,7 @@ namespace SharpSid
       config.sidDefault     = SID2Types.sid2_model_t.SID2_MODEL_CORRECT;
       config.sidSamples     = true;
       config.precision      = SID2Types.SID2_DEFAULT_PRECISION;
+
       _InternalPlayer.config( config );
 
       _CurrentTune.selectSong( SongNumber );
@@ -370,6 +371,110 @@ namespace SharpSid
       }
       _InternalPlayer = null;
     }
+
+
+
+    private static byte[] StringToByteArrayFastest( string hex )
+    {
+      if ( hex.Length % 2 == 1 )
+        throw new Exception( "The binary key cannot have an odd number of digits" );
+
+      byte[] arr = new byte[hex.Length >> 1];
+
+      for ( int i = 0; i < hex.Length >> 1; ++i )
+      {
+        arr[i] = (byte)( ( GetHexVal( hex[i << 1] ) << 4 ) + ( GetHexVal( hex[( i << 1 ) + 1] ) ) );
+      }
+
+      return arr;
+    }
+
+
+
+    private static int GetHexVal( char hex )
+    {
+      int val = (int)hex;
+      //For uppercase A-F letters:
+      //return val - (val < 58 ? 48 : 55);
+      //For lowercase a-f letters:
+      //return val - (val < 58 ? 48 : 87);
+      //Or the two combined, but a bit slower:
+      return val - ( val < 58 ? 48 : ( val < 97 ? 55 : 87 ) );
+    }
+
+
+
+    /// <summary>
+    /// Inject regular program and set start address
+    /// </summary>
+    /// <param name="HexData"></param>
+    /// <param name="DataStartAddress"></param>
+    /// <param name="InitialAddress"></param>
+    /// <returns></returns>
+    public bool PlayFromBinary( string HexData, int DataStartAddress, int InitialAddress )
+    {
+      Stop();
+
+      var  byteData = StringToByteArrayFastest( HexData );
+
+      _CurrentTune = new SidTune();
+
+      _CurrentTune.info.loadAddr = DataStartAddress;
+      _CurrentTune.info.c64dataLen = byteData.Length;
+      _CurrentTune.info.initAddr = InitialAddress;
+      _CurrentTune.info.playAddr = InitialAddress;
+      _CurrentTune.info.compatibility = SidTune.SIDTUNE_COMPATIBILITY_R64;
+      _CurrentTune.InjectProgramInMemory( byteData, DataStartAddress );
+      _CurrentTune.status = true;
+
+      _WavePlayer = new WaveOut();
+
+      WaveFormat    fmt                     = new WaveFormat( _Frequency, 16, 2 );
+      _BufferedWaveProvider = new BufferedWaveProvider( fmt );
+      _BufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds( 2 ); // allow us to get well ahead of ourselves
+
+      _WavePlayer.Init( _BufferedWaveProvider );
+
+      _InternalPlayer = new InternalPlayer();
+
+      sid2_config_t config = _InternalPlayer.config();
+
+      config.frequency = _Frequency;
+      config.playback = SID2Types.sid2_playback_t.sid2_mono;
+      config.optimisation = SID2Types.SID2_DEFAULT_OPTIMISATION;
+      config.sidModel = (SID2Types.sid2_model_t)_CurrentTune.Info.sidModel;
+      config.clockDefault = SID2Types.sid2_clock_t.SID2_CLOCK_CORRECT;
+      config.clockSpeed = SID2Types.sid2_clock_t.SID2_CLOCK_CORRECT;
+      config.clockForced = false;
+      config.environment = SID2Types.sid2_env_t.sid2_envR;
+      config.forceDualSids = false;
+      config.volume = 255;
+      config.sampleFormat = SID2Types.sid2_sample_t.SID2_LITTLE_SIGNED;
+      config.sidDefault = SID2Types.sid2_model_t.SID2_MODEL_CORRECT;
+      config.sidSamples = true;
+      config.precision = SID2Types.SID2_DEFAULT_PRECISION;
+      config.environment = SID2Types.sid2_env_t.sid2_envR;
+
+      _InternalPlayer.load( _CurrentTune );
+      _InternalPlayer.config( config );
+
+      // inject code
+      for ( int i = 0; i < byteData.Length; ++i )
+      {
+        _InternalPlayer.mem_writeMemByte( DataStartAddress + i, byteData[i] );
+      }
+
+      _InternalPlayer.SetCPUPos( InitialAddress );
+      _IsStereo = _CurrentTune.isStereo;
+
+      _InternalPlayer.start();
+
+      _Thread = new Thread( new ThreadStart( ThreadProc ) );
+      _Thread.Start();
+
+      return true;
+    }
+
 
   }
 }

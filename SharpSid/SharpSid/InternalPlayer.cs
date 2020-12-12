@@ -427,6 +427,16 @@ namespace SharpSid
       return 0;
     }
 
+
+
+    // for program injection
+    internal void SetCPUPos( int initialAddress )
+    {
+      sid6510.reset( initialAddress, 0, 0, 0 );
+    }
+
+
+
     internal void mixer()
     {
       long cycles;

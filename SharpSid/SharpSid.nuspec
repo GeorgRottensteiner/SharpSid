@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>GeorgRottensteiner.SharpSid</id>
+    <version>0.9.0</version>
+    <authors>Georg Rottensteiner</authors>
+    <owners>grottensteiner</owners>
+    <license type="expression">GPL-2.0-or-later</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A C64 SID music player for PSID and raw files</description>
+    <copyright>Copyright ©2016 Contoso Corporation</copyright>
+    <releaseNotes>Initial Release, plays PSID and raw prg files</releaseNotes>
+    <tags>audio library c64 sid</tags>
+    <dependencies>
+      <group targetFramework="net40">
+        <dependency id="NAudio" version="1.10.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="gpl-2.0.txt" target="" />
+    <file src="bin/Release/SharpSid.dll" target="lib/net40" />
+  </files>
+</package>

@@ -8,12 +8,11 @@
     <ProjectGuid>{A0CCB485-382E-4230-A600-8A58734CF0BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>sidplay</RootNamespace>
-    <AssemblyName>sidplay</AssemblyName>
+    <RootNamespace>SharpSid</RootNamespace>
+    <AssemblyName>SharpSid</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

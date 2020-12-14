@@ -53,7 +53,7 @@ namespace SharpSid
         writer.Write( credits.Length );
         for ( int i = 0; i < credits.Length; i++ )
         {
-          if ( string.IsNullOrWhiteSpace( credits[i] ) )
+          if ( !string.IsNullOrEmpty( credits[i] ) )
           {
             writer.Write( credits[i] );
           }

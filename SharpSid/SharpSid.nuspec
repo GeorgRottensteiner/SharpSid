@@ -8,7 +8,7 @@
     <license type="expression">GPL-2.0-or-later</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C64 SID music player for PSID and raw files</description>
-    <copyright>Copyright ©2016 Contoso Corporation</copyright>
+    <copyright>Copyright ©2020 Georg Rottensteiner</copyright>
     <releaseNotes>Initial Release, plays PSID and raw prg files</releaseNotes>
     <tags>audio library c64 sid</tags>
     <dependencies>

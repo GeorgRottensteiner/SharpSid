@@ -106,6 +106,56 @@ namespace SharpSid
 
 
 
+    public bool LoadSIDInfoFromFile( string Filename, out SidTuneInfo Info )
+    {
+      Info = null;
+      try
+      {
+        using ( FileStream file = new FileStream( Filename, FileMode.Open, FileAccess.Read ) )
+        {
+          var tempTune = new SidTune( file );
+
+          if ( !tempTune.StatusOk )
+          {
+            return false;
+          }
+          Info = tempTune.info;
+          return true;
+        }
+      }
+      catch ( Exception )
+      {
+        return false;
+      }
+    }
+
+
+
+    public bool LoadSIDInfoFromStream( Stream IOIn, out SidTuneInfo Info )
+    {
+      Info = null;
+      try
+      {
+        using ( IOIn )
+        {
+          var tempTune = new SidTune( IOIn );
+
+          if ( !tempTune.StatusOk )
+          {
+            return false;
+          }
+          Info = tempTune.info;
+          return true;
+        }
+      }
+      catch ( Exception )
+      {
+        return false;
+      }
+    }
+
+
+
     public bool LoadSIDFromFile( string Filename )
     {
       Stop();
@@ -186,6 +236,10 @@ namespace SharpSid
     /// <param name="tune">SidTune</param>
     public void Start()
     {
+      if ( State == State.PLAYING )
+      {
+        return;
+      }
       Start( 0 );
     }
 
@@ -473,6 +527,21 @@ namespace SharpSid
       _Thread.Start();
 
       return true;
+    }
+
+
+
+    public void SetVolume( int Volume )
+    {
+      if ( Volume < 0 )
+      {
+        Volume = 0;
+      }
+      if ( Volume > 100 )
+      {
+        Volume = 100;
+      }
+      _WavePlayer.Volume = Volume * 0.01f;
     }
 
 

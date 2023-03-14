@@ -51,6 +51,8 @@ namespace SharpSidPlayerForms
       this.songPlayingTimer = new System.Windows.Forms.Timer(this.components);
       this.labelSongNumber = new System.Windows.Forms.Label();
       this.scrollVolume = new System.Windows.Forms.HScrollBar();
+      this.btnMoveUp = new System.Windows.Forms.Button();
+      this.btnMoveDown = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // btnPlay
@@ -132,6 +134,7 @@ namespace SharpSidPlayerForms
       // 
       // listSongs
       // 
+      this.listSongs.AllowDrop = true;
       this.listSongs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnName});
       this.listSongs.FullRowSelect = true;
@@ -143,6 +146,8 @@ namespace SharpSidPlayerForms
       this.listSongs.UseCompatibleStateImageBehavior = false;
       this.listSongs.View = System.Windows.Forms.View.Details;
       this.listSongs.SelectedIndexChanged += new System.EventHandler(this.listSongs_SelectedIndexChanged);
+      this.listSongs.DragDrop += new System.Windows.Forms.DragEventHandler(this.listSongs_DragDrop);
+      this.listSongs.DragOver += new System.Windows.Forms.DragEventHandler(this.listSongs_DragOver);
       this.listSongs.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listSongs_MouseDoubleClick);
       // 
       // columnName
@@ -156,7 +161,7 @@ namespace SharpSidPlayerForms
       this.btnTogglePlaylist.Name = "btnTogglePlaylist";
       this.btnTogglePlaylist.Size = new System.Drawing.Size(36, 23);
       this.btnTogglePlaylist.TabIndex = 0;
-      this.btnTogglePlaylist.Text = "▼▼";
+      this.btnTogglePlaylist.Text = "▲▲";
       this.btnTogglePlaylist.UseVisualStyleBackColor = true;
       this.btnTogglePlaylist.Click += new System.EventHandler(this.btnTogglePlaylist_Click);
       // 
@@ -253,8 +258,29 @@ namespace SharpSidPlayerForms
       this.scrollVolume.Value = 100;
       this.scrollVolume.Scroll += new System.Windows.Forms.ScrollEventHandler(this.scrollVolume_Scroll);
       // 
+      // btnMoveUp
+      // 
+      this.btnMoveUp.Location = new System.Drawing.Point(141, 366);
+      this.btnMoveUp.Name = "btnMoveUp";
+      this.btnMoveUp.Size = new System.Drawing.Size(37, 23);
+      this.btnMoveUp.TabIndex = 0;
+      this.btnMoveUp.Text = "▲";
+      this.btnMoveUp.UseVisualStyleBackColor = true;
+      this.btnMoveUp.Click += new System.EventHandler(this.btnMoveUp_Click);
+      // 
+      // btnMoveDown
+      // 
+      this.btnMoveDown.Location = new System.Drawing.Point(184, 366);
+      this.btnMoveDown.Name = "btnMoveDown";
+      this.btnMoveDown.Size = new System.Drawing.Size(37, 23);
+      this.btnMoveDown.TabIndex = 0;
+      this.btnMoveDown.Text = "▼";
+      this.btnMoveDown.UseVisualStyleBackColor = true;
+      this.btnMoveDown.Click += new System.EventHandler(this.btnMoveDown_Click);
+      // 
       // FormPlayer
       // 
+      this.AllowDrop = true;
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(404, 401);
@@ -269,6 +295,8 @@ namespace SharpSidPlayerForms
       this.Controls.Add(this.btnTogglePlaylist);
       this.Controls.Add(this.btnLoadPlaylist);
       this.Controls.Add(this.btnSaveList);
+      this.Controls.Add(this.btnMoveDown);
+      this.Controls.Add(this.btnMoveUp);
       this.Controls.Add(this.btnClearList);
       this.Controls.Add(this.btnRemoveSong);
       this.Controls.Add(this.btnAddSongToList);
@@ -310,6 +338,8 @@ namespace SharpSidPlayerForms
     private System.Windows.Forms.Timer songPlayingTimer;
     private System.Windows.Forms.Label labelSongNumber;
     private System.Windows.Forms.HScrollBar scrollVolume;
+    private System.Windows.Forms.Button btnMoveUp;
+    private System.Windows.Forms.Button btnMoveDown;
   }
 }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
@@ -20,6 +21,8 @@ namespace SharpSidPlayerForms
     Player              _Player = null;
 
     Settings            _Settings = new Settings();
+
+    Random              _RNG = new Random();
 
     Dictionary<string,List<TimeSpan>>   _SongLengths = new Dictionary<string, List<TimeSpan>>();
 
@@ -111,6 +114,10 @@ namespace SharpSidPlayerForms
               _SongInfosUpdated.Add( infosToFetch[infosFetched + i] );
             }
             infosFetched += numBatchCount;
+          }
+          if ( _ShutdownSignal.WaitOne( 0 ) )
+          {
+            return;
           }
         }
         
@@ -293,7 +300,6 @@ namespace SharpSidPlayerForms
     private void btnStop_Click( object sender, EventArgs e )
     {
       _Player.Stop();
-      songPlayingTimer.Stop();
     }
 
 
@@ -319,27 +325,14 @@ namespace SharpSidPlayerForms
 
     private void btnPrevious_Click( object sender, EventArgs e )
     {
-      if ( _Player.TuneInfo.currentSong > 1 )
+      if ( _Player.State == State.PLAYING )
       {
-        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-
-        switch ( _Player.State )
-        {
-          case State.PLAYING:
-          case State.PAUSED:
-            _Player.Stop();
-            break;
-        }
-
-        labelSongName.Text = "";
+        // reset to start
+        StopSong();
         _CurrentSongPlayedTime = new TimeSpan();
         _CurrentSongLastPlayStartTimestamp = DateTime.Now;
-        songPlayingTimer.Start();
-        _Player.Start( _Player.TuneInfo.currentSong - 1 );
-
+        _Player.Start( _Player.TuneInfo.currentSong );
         UpdateSongInfo();
-
-        Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
       }
     }
 
@@ -347,7 +340,14 @@ namespace SharpSidPlayerForms
 
     private void btnNext_Click( object sender, EventArgs e )
     {
-      PlayNextSubSong();
+      if ( checkShuffle.Checked )
+      {
+        PlayRandomSong();
+      }
+      else
+      {
+        PlayNextSong();
+      }
     }
 
 
@@ -367,10 +367,6 @@ namespace SharpSidPlayerForms
 
     private void PlayNextSubSong()
     {
-      if ( _Player.TuneInfo.currentSong >= _Player.TuneInfo.songs )
-      {
-        return;
-      }
       Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
 
       StopSong();
@@ -414,6 +410,10 @@ namespace SharpSidPlayerForms
         _Player.Start();
 
         UpdateSongInfo();
+      }
+      else
+      {
+        System.Diagnostics.Debug.WriteLine( $"StartSong {SongFile} failed!" );
       }
     }
 
@@ -518,12 +518,19 @@ namespace SharpSidPlayerForms
     private SongInfo AddSongToList( string FileName )
     {
       var item = listSongs.Items.Add( System.IO.Path.GetFileNameWithoutExtension( FileName ) );
+      item.ToolTipText = FileName;
 
       var songInfo = new SongInfo();
       songInfo.SongFile = FileName;
       songInfo.Item     = item;
 
       item.Tag = songInfo;
+
+      lock ( _SongInfosToFetch )
+      {
+        _SongInfosToFetch.Add( songInfo );
+      }
+      _SongFetcherSignal.Set();
 
       return songInfo;
     }
@@ -665,8 +672,14 @@ namespace SharpSidPlayerForms
       }
       string[]  lines = System.IO.File.ReadAllLines( _PlayListName, encoding );
       var newInfos = new List<SongInfo>();
+      int       lineIndex = 0;
       foreach ( var line in lines )
       {
+        ++lineIndex;
+        if ( ( lineIndex % 1024 ) == 0 )
+        {
+          Application.DoEvents();
+        }
         if ( line.StartsWith( "#" ) )
         {
           continue;
@@ -686,6 +699,7 @@ namespace SharpSidPlayerForms
           // a back slash, no drive letter, therefor relative!
           songPath = _PlayListName.Substring( 0, 2 ) + songPath;
         }
+        item.ToolTipText = songPath;
 
         var songInfo = new SongInfo() { SongFile = songPath };
         item.Tag = songInfo;
@@ -749,6 +763,10 @@ namespace SharpSidPlayerForms
       {
         PlayNextSubSong();
       }
+      else if ( checkShuffle.Checked )
+      {
+        PlayRandomSong();
+      }
       else
       {
         PlayNextSong();
@@ -764,6 +782,7 @@ namespace SharpSidPlayerForms
         return;
       }
       StopSong();
+
       if ( listSongs.SelectedIndices.Count == 0 )
       {
         listSongs.SelectedIndices.Clear();
@@ -775,7 +794,25 @@ namespace SharpSidPlayerForms
 
         listSongs.SelectedIndices.Clear();
         listSongs.SelectedIndices.Add( nextIndex );
+        listSongs.EnsureVisible( nextIndex );
       }
+      StartSong( ( (SongInfo)listSongs.SelectedItems[0].Tag ).SongFile );
+    }
+
+
+
+    private void PlayRandomSong()
+    {
+      if ( listSongs.Items.Count == 0 )
+      {
+        return;
+      }
+      StopSong();
+      int   nextIndex = _RNG.Next( listSongs.Items.Count );
+
+      listSongs.SelectedIndices.Clear();
+      listSongs.SelectedIndices.Add( nextIndex );
+      listSongs.EnsureVisible( nextIndex );
       StartSong( ( (SongInfo)listSongs.SelectedItems[0].Tag ).SongFile );
     }
 
@@ -861,6 +898,64 @@ namespace SharpSidPlayerForms
       item2.EnsureVisible();
       btnMoveUp.Enabled = ( listSongs.SelectedIndices.Count > 0 ) && ( listSongs.SelectedIndices[0] > 0 );
       btnMoveDown.Enabled = ( listSongs.SelectedIndices.Count > 0 ) && ( listSongs.SelectedIndices[0] + 1 < listSongs.Items.Count );
+    }
+
+
+
+    private void listSongs_MouseHover( object sender, EventArgs e )
+    {
+      /*
+      var item = listSongs.GetItemAt( listSongs.PointToClient( MousePosition ).X, listSongs.PointToClient( MousePosition ).Y );
+      if ( item != null )
+      {
+        toolTipForm.ShowAlways = true;
+        toolTipForm.ReshowDelay = 0;
+        toolTipForm.Hide( listSongs );
+        toolTipForm.Show( ( (SongInfo)item.Tag ).SongFile, listSongs );
+        toolTipForm.Active = true;
+      }*/
+    }
+
+
+
+    private void checkShuffle_CheckedChanged( object sender, EventArgs e )
+    {
+
+    }
+
+
+
+    private void btnPreviousSubSong_Click( object sender, EventArgs e )
+    {
+      if ( _Player.TuneInfo.currentSong > 1 )
+      {
+        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+
+        switch ( _Player.State )
+        {
+          case State.PLAYING:
+          case State.PAUSED:
+            _Player.Stop();
+            break;
+        }
+
+        labelSongName.Text = "";
+        _CurrentSongPlayedTime = new TimeSpan();
+        _CurrentSongLastPlayStartTimestamp = DateTime.Now;
+        songPlayingTimer.Start();
+        _Player.Start( _Player.TuneInfo.currentSong - 1 );
+
+        UpdateSongInfo();
+
+        Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+      }
+    }
+
+
+
+    private void btnNextSubSong_Click( object sender, EventArgs e )
+    {
+      PlayNextSubSong();
     }
 
 

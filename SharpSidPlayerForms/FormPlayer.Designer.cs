@@ -53,34 +53,38 @@ namespace SharpSidPlayerForms
       this.scrollVolume = new System.Windows.Forms.HScrollBar();
       this.btnMoveUp = new System.Windows.Forms.Button();
       this.btnMoveDown = new System.Windows.Forms.Button();
+      this.toolTipForm = new System.Windows.Forms.ToolTip(this.components);
+      this.checkShuffle = new System.Windows.Forms.CheckBox();
+      this.btnPrevSubSong = new System.Windows.Forms.Button();
+      this.btnNextSubSong = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // btnPlay
       // 
-      this.btnPlay.Location = new System.Drawing.Point(55, 146);
+      this.btnPlay.Location = new System.Drawing.Point(97, 146);
       this.btnPlay.Name = "btnPlay";
       this.btnPlay.Size = new System.Drawing.Size(36, 23);
-      this.btnPlay.TabIndex = 0;
+      this.btnPlay.TabIndex = 3;
       this.btnPlay.Text = "►";
       this.btnPlay.UseVisualStyleBackColor = true;
       this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
       // 
       // btnStop
       // 
-      this.btnStop.Location = new System.Drawing.Point(139, 146);
+      this.btnStop.Location = new System.Drawing.Point(181, 146);
       this.btnStop.Name = "btnStop";
       this.btnStop.Size = new System.Drawing.Size(36, 23);
-      this.btnStop.TabIndex = 0;
+      this.btnStop.TabIndex = 5;
       this.btnStop.Text = "█";
       this.btnStop.UseVisualStyleBackColor = true;
       this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
       // 
       // btnPause
       // 
-      this.btnPause.Location = new System.Drawing.Point(97, 146);
+      this.btnPause.Location = new System.Drawing.Point(139, 146);
       this.btnPause.Name = "btnPause";
       this.btnPause.Size = new System.Drawing.Size(36, 23);
-      this.btnPause.TabIndex = 0;
+      this.btnPause.TabIndex = 4;
       this.btnPause.Text = "||";
       this.btnPause.UseVisualStyleBackColor = true;
       this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
@@ -90,18 +94,18 @@ namespace SharpSidPlayerForms
       this.btnPrevious.Location = new System.Drawing.Point(13, 146);
       this.btnPrevious.Name = "btnPrevious";
       this.btnPrevious.Size = new System.Drawing.Size(36, 23);
-      this.btnPrevious.TabIndex = 0;
-      this.btnPrevious.Text = "|<";
+      this.btnPrevious.TabIndex = 1;
+      this.btnPrevious.Text = "||<";
       this.btnPrevious.UseVisualStyleBackColor = true;
       this.btnPrevious.Click += new System.EventHandler(this.btnPrevious_Click);
       // 
       // btnNext
       // 
-      this.btnNext.Location = new System.Drawing.Point(181, 146);
+      this.btnNext.Location = new System.Drawing.Point(265, 146);
       this.btnNext.Name = "btnNext";
       this.btnNext.Size = new System.Drawing.Size(36, 23);
-      this.btnNext.TabIndex = 0;
-      this.btnNext.Text = ">|";
+      this.btnNext.TabIndex = 7;
+      this.btnNext.Text = ">||";
       this.btnNext.UseVisualStyleBackColor = true;
       this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
       // 
@@ -124,10 +128,10 @@ namespace SharpSidPlayerForms
       // 
       // btnOpenSong
       // 
-      this.btnOpenSong.Location = new System.Drawing.Point(312, 146);
+      this.btnOpenSong.Location = new System.Drawing.Point(362, 146);
       this.btnOpenSong.Name = "btnOpenSong";
       this.btnOpenSong.Size = new System.Drawing.Size(36, 23);
-      this.btnOpenSong.TabIndex = 0;
+      this.btnOpenSong.TabIndex = 9;
       this.btnOpenSong.Text = "...";
       this.btnOpenSong.UseVisualStyleBackColor = true;
       this.btnOpenSong.Click += new System.EventHandler(this.btnOpenSong_Click);
@@ -141,14 +145,16 @@ namespace SharpSidPlayerForms
       this.listSongs.HideSelection = false;
       this.listSongs.Location = new System.Drawing.Point(12, 187);
       this.listSongs.Name = "listSongs";
-      this.listSongs.Size = new System.Drawing.Size(378, 173);
-      this.listSongs.TabIndex = 2;
+      this.listSongs.ShowItemToolTips = true;
+      this.listSongs.Size = new System.Drawing.Size(428, 173);
+      this.listSongs.TabIndex = 11;
       this.listSongs.UseCompatibleStateImageBehavior = false;
       this.listSongs.View = System.Windows.Forms.View.Details;
       this.listSongs.SelectedIndexChanged += new System.EventHandler(this.listSongs_SelectedIndexChanged);
       this.listSongs.DragDrop += new System.Windows.Forms.DragEventHandler(this.listSongs_DragDrop);
       this.listSongs.DragOver += new System.Windows.Forms.DragEventHandler(this.listSongs_DragOver);
       this.listSongs.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listSongs_MouseDoubleClick);
+      this.listSongs.MouseHover += new System.EventHandler(this.listSongs_MouseHover);
       // 
       // columnName
       // 
@@ -157,10 +163,10 @@ namespace SharpSidPlayerForms
       // 
       // btnTogglePlaylist
       // 
-      this.btnTogglePlaylist.Location = new System.Drawing.Point(354, 146);
+      this.btnTogglePlaylist.Location = new System.Drawing.Point(404, 146);
       this.btnTogglePlaylist.Name = "btnTogglePlaylist";
       this.btnTogglePlaylist.Size = new System.Drawing.Size(36, 23);
-      this.btnTogglePlaylist.TabIndex = 0;
+      this.btnTogglePlaylist.TabIndex = 10;
       this.btnTogglePlaylist.Text = "▲▲";
       this.btnTogglePlaylist.UseVisualStyleBackColor = true;
       this.btnTogglePlaylist.Click += new System.EventHandler(this.btnTogglePlaylist_Click);
@@ -170,7 +176,7 @@ namespace SharpSidPlayerForms
       this.btnAddSongToList.Location = new System.Drawing.Point(12, 366);
       this.btnAddSongToList.Name = "btnAddSongToList";
       this.btnAddSongToList.Size = new System.Drawing.Size(37, 23);
-      this.btnAddSongToList.TabIndex = 0;
+      this.btnAddSongToList.TabIndex = 12;
       this.btnAddSongToList.Text = "Add";
       this.btnAddSongToList.UseVisualStyleBackColor = true;
       this.btnAddSongToList.Click += new System.EventHandler(this.btnAddSong_Click);
@@ -181,7 +187,7 @@ namespace SharpSidPlayerForms
       this.btnRemoveSong.Location = new System.Drawing.Point(55, 366);
       this.btnRemoveSong.Name = "btnRemoveSong";
       this.btnRemoveSong.Size = new System.Drawing.Size(37, 23);
-      this.btnRemoveSong.TabIndex = 0;
+      this.btnRemoveSong.TabIndex = 13;
       this.btnRemoveSong.Text = "Rem";
       this.btnRemoveSong.UseVisualStyleBackColor = true;
       this.btnRemoveSong.Click += new System.EventHandler(this.btnRemoveSong_Click);
@@ -192,37 +198,37 @@ namespace SharpSidPlayerForms
       this.btnClearList.Location = new System.Drawing.Point(98, 366);
       this.btnClearList.Name = "btnClearList";
       this.btnClearList.Size = new System.Drawing.Size(37, 23);
-      this.btnClearList.TabIndex = 0;
+      this.btnClearList.TabIndex = 14;
       this.btnClearList.Text = "Clr";
       this.btnClearList.UseVisualStyleBackColor = true;
       this.btnClearList.Click += new System.EventHandler(this.btnClearList_Click);
       // 
       // btnSaveList
       // 
-      this.btnSaveList.Location = new System.Drawing.Point(311, 366);
+      this.btnSaveList.Location = new System.Drawing.Point(361, 366);
       this.btnSaveList.Name = "btnSaveList";
       this.btnSaveList.Size = new System.Drawing.Size(37, 23);
-      this.btnSaveList.TabIndex = 0;
+      this.btnSaveList.TabIndex = 18;
       this.btnSaveList.Text = "Sav";
       this.btnSaveList.UseVisualStyleBackColor = true;
       this.btnSaveList.Click += new System.EventHandler(this.btnSaveList_Click);
       // 
       // btnLoadPlaylist
       // 
-      this.btnLoadPlaylist.Location = new System.Drawing.Point(353, 366);
+      this.btnLoadPlaylist.Location = new System.Drawing.Point(403, 366);
       this.btnLoadPlaylist.Name = "btnLoadPlaylist";
       this.btnLoadPlaylist.Size = new System.Drawing.Size(37, 23);
-      this.btnLoadPlaylist.TabIndex = 0;
+      this.btnLoadPlaylist.TabIndex = 19;
       this.btnLoadPlaylist.Text = "Lod";
       this.btnLoadPlaylist.UseVisualStyleBackColor = true;
       this.btnLoadPlaylist.Click += new System.EventHandler(this.btnLoadList_Click);
       // 
       // btnSettings
       // 
-      this.btnSettings.Location = new System.Drawing.Point(270, 146);
+      this.btnSettings.Location = new System.Drawing.Point(320, 146);
       this.btnSettings.Name = "btnSettings";
       this.btnSettings.Size = new System.Drawing.Size(36, 23);
-      this.btnSettings.TabIndex = 0;
+      this.btnSettings.TabIndex = 8;
       this.btnSettings.Text = "Set";
       this.btnSettings.UseVisualStyleBackColor = true;
       this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
@@ -254,7 +260,7 @@ namespace SharpSidPlayerForms
       this.scrollVolume.Location = new System.Drawing.Point(14, 126);
       this.scrollVolume.Name = "scrollVolume";
       this.scrollVolume.Size = new System.Drawing.Size(119, 17);
-      this.scrollVolume.TabIndex = 3;
+      this.scrollVolume.TabIndex = 0;
       this.scrollVolume.Value = 100;
       this.scrollVolume.Scroll += new System.Windows.Forms.ScrollEventHandler(this.scrollVolume_Scroll);
       // 
@@ -263,7 +269,7 @@ namespace SharpSidPlayerForms
       this.btnMoveUp.Location = new System.Drawing.Point(141, 366);
       this.btnMoveUp.Name = "btnMoveUp";
       this.btnMoveUp.Size = new System.Drawing.Size(37, 23);
-      this.btnMoveUp.TabIndex = 0;
+      this.btnMoveUp.TabIndex = 15;
       this.btnMoveUp.Text = "▲";
       this.btnMoveUp.UseVisualStyleBackColor = true;
       this.btnMoveUp.Click += new System.EventHandler(this.btnMoveUp_Click);
@@ -273,17 +279,49 @@ namespace SharpSidPlayerForms
       this.btnMoveDown.Location = new System.Drawing.Point(184, 366);
       this.btnMoveDown.Name = "btnMoveDown";
       this.btnMoveDown.Size = new System.Drawing.Size(37, 23);
-      this.btnMoveDown.TabIndex = 0;
+      this.btnMoveDown.TabIndex = 16;
       this.btnMoveDown.Text = "▼";
       this.btnMoveDown.UseVisualStyleBackColor = true;
       this.btnMoveDown.Click += new System.EventHandler(this.btnMoveDown_Click);
+      // 
+      // checkShuffle
+      // 
+      this.checkShuffle.Appearance = System.Windows.Forms.Appearance.Button;
+      this.checkShuffle.Location = new System.Drawing.Point(319, 366);
+      this.checkShuffle.Name = "checkShuffle";
+      this.checkShuffle.Size = new System.Drawing.Size(37, 23);
+      this.checkShuffle.TabIndex = 17;
+      this.checkShuffle.Text = "Shf";
+      this.checkShuffle.UseVisualStyleBackColor = true;
+      this.checkShuffle.CheckedChanged += new System.EventHandler(this.checkShuffle_CheckedChanged);
+      // 
+      // btnPrevSubSong
+      // 
+      this.btnPrevSubSong.Location = new System.Drawing.Point(55, 146);
+      this.btnPrevSubSong.Name = "btnPrevSubSong";
+      this.btnPrevSubSong.Size = new System.Drawing.Size(36, 23);
+      this.btnPrevSubSong.TabIndex = 2;
+      this.btnPrevSubSong.Text = "|<";
+      this.btnPrevSubSong.UseVisualStyleBackColor = true;
+      this.btnPrevSubSong.Click += new System.EventHandler(this.btnPreviousSubSong_Click);
+      // 
+      // btnNextSubSong
+      // 
+      this.btnNextSubSong.Location = new System.Drawing.Point(223, 146);
+      this.btnNextSubSong.Name = "btnNextSubSong";
+      this.btnNextSubSong.Size = new System.Drawing.Size(36, 23);
+      this.btnNextSubSong.TabIndex = 6;
+      this.btnNextSubSong.Text = ">|";
+      this.btnNextSubSong.UseVisualStyleBackColor = true;
+      this.btnNextSubSong.Click += new System.EventHandler(this.btnNextSubSong_Click);
       // 
       // FormPlayer
       // 
       this.AllowDrop = true;
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(404, 401);
+      this.ClientSize = new System.Drawing.Size(452, 401);
+      this.Controls.Add(this.checkShuffle);
       this.Controls.Add(this.scrollVolume);
       this.Controls.Add(this.listSongs);
       this.Controls.Add(this.labelSongLength);
@@ -302,7 +340,9 @@ namespace SharpSidPlayerForms
       this.Controls.Add(this.btnAddSongToList);
       this.Controls.Add(this.btnSettings);
       this.Controls.Add(this.btnOpenSong);
+      this.Controls.Add(this.btnNextSubSong);
       this.Controls.Add(this.btnNext);
+      this.Controls.Add(this.btnPrevSubSong);
       this.Controls.Add(this.btnPrevious);
       this.Controls.Add(this.btnPlay);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -340,6 +380,10 @@ namespace SharpSidPlayerForms
     private System.Windows.Forms.HScrollBar scrollVolume;
     private System.Windows.Forms.Button btnMoveUp;
     private System.Windows.Forms.Button btnMoveDown;
+    private System.Windows.Forms.ToolTip toolTipForm;
+    private System.Windows.Forms.CheckBox checkShuffle;
+    private System.Windows.Forms.Button btnPrevSubSong;
+    private System.Windows.Forms.Button btnNextSubSong;
   }
 }
 

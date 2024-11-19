@@ -541,7 +541,10 @@ namespace SharpSid
       {
         Volume = 100;
       }
-      _WavePlayer.Volume = Volume * 0.01f;
+      if ( _WavePlayer != null )
+      {
+        _WavePlayer.Volume = Volume * 0.01f;
+      }
     }
 
 

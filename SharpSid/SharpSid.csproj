@@ -1,163 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A0CCB485-382E-4230-A600-8A58734CF0BA}</ProjectGuid>
+    <TargetFrameworks>net35;net40;net6.0;net8.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpSid</RootNamespace>
-    <AssemblyName>SharpSid</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Configurations>Debug;Release</Configurations>
+    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugNET40|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)\</OutputPath>
-    <DefineConstants>NET40;TRACE;DEBUG;WINDOWS _DEBUG_CPU _SPLINE_BRUTE_FORCE ANTTI_LANKILA_PATCH MOS6510_ACCURATE_CYCLES _NO_RTS_UPON_BRK SIDTUNE_PSID2NG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>DEBUG;WINDOWS _DEBUG_CPU _SPLINE_BRUTE_FORCE ANTTI_LANKILA_PATCH MOS6510_ACCURATE_CYCLES _NO_RTS_UPON_BRK SIDTUNE_PSID2NG</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseNET40|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)\</OutputPath>
-    <DefineConstants>NET40;TRACE;WINDOWS _SPLINE_BRUTE_FORCE ANTTI_LANKILA_PATCH MOS6510_ACCURATE_CYCLES _NO_RTS_UPON_BRK SIDTUNE_PSID2NG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNET35|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)\</OutputPath>
-    <DefineConstants>NET35;TRACE;DEBUG;WINDOWS _DEBUG_CPU _SPLINE_BRUTE_FORCE ANTTI_LANKILA_PATCH MOS6510_ACCURATE_CYCLES _NO_RTS_UPON_BRK SIDTUNE_PSID2NG</DefineConstants>
+    <Optimize>false</Optimize>
+    <DefineConstants>WINDOWS _DEBUG_CPU _SPLINE_BRUTE_FORCE ANTTI_LANKILA_PATCH MOS6510_ACCURATE_CYCLES _NO_RTS_UPON_BRK SIDTUNE_PSID2NG</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNET35|AnyCPU'">
-    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)\</OutputPath>
-    <DefineConstants>NET35;TRACE;WINDOWS _SPLINE_BRUTE_FORCE ANTTI_LANKILA_PATCH MOS6510_ACCURATE_CYCLES _NO_RTS_UPON_BRK SIDTUNE_PSID2NG</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharpSid.State.cs" />
-    <Compile Include="SharpSid\common\BufPos.cs" />
-    <Compile Include="SharpSid\common\events\CiaEvent.cs" />
-    <Compile Include="SharpSid\common\events\CPUEvent.cs" />
-    <Compile Include="SharpSid\common\events\Event.cs" />
-    <Compile Include="SharpSid\common\events\EventList.cs" />
-    <Compile Include="SharpSid\common\events\EventMixer.cs" />
-    <Compile Include="SharpSid\common\events\EventRTC.cs" />
-    <Compile Include="SharpSid\common\events\EventScheduler.cs" />
-    <Compile Include="SharpSid\common\events\EventTa.cs" />
-    <Compile Include="SharpSid\common\events\EventTb.cs" />
-    <Compile Include="SharpSid\common\events\EventTimeWarp.cs" />
-    <Compile Include="SharpSid\common\events\EventTod.cs" />
-    <Compile Include="SharpSid\common\events\event_phase_t.cs" />
-    <Compile Include="SharpSid\common\events\GalwayEvent.cs" />
-    <Compile Include="SharpSid\common\events\SampleEvent.cs" />
-    <Compile Include="SharpSid\common\events\xSIDEvent.cs" />
-    <Compile Include="SharpSid\common\file65.cs" />
-    <Compile Include="SharpSid\common\SID2Types.cs" />
-    <Compile Include="SharpSid\common\sid2_config_t.cs" />
-    <Compile Include="SharpSid\common\sid2_info_t.cs" />
-    <Compile Include="SharpSid\common\SIDEndian.cs" />
-    <Compile Include="SharpSid\components\mem\memBasic.cs" />
-    <Compile Include="SharpSid\components\mem\memChar.cs" />
-    <Compile Include="SharpSid\components\mem\memKernal.cs" />
-    <Compile Include="SharpSid\components\mem\memPowerOn.cs" />
-    <Compile Include="SharpSid\components\mem\memPSIDDrv.cs" />
-    <Compile Include="SharpSid\components\mos6510\Disassembler.cs" />
-    <Compile Include="SharpSid\components\mos6510\MOS6510.cs" />
-    <Compile Include="SharpSid\components\mos6510\OpCode.cs" />
-    <Compile Include="SharpSid\components\mos6510\ProcessorCycle.cs" />
-    <Compile Include="SharpSid\components\mos6510\ProcessorOperations.cs" />
-    <Compile Include="SharpSid\components\mos6510\SID6510.cs" />
-    <Compile Include="SharpSid\components\mos6526\C64cia1.cs" />
-    <Compile Include="SharpSid\components\mos6526\C64cia2.cs" />
-    <Compile Include="SharpSid\components\mos6526\MOS6526.cs" />
-    <Compile Include="SharpSid\components\mos6526\SID6526.cs" />
-    <Compile Include="SharpSid\components\mos656x\C64VIC.cs" />
-    <Compile Include="SharpSid\components\mos656x\MOS656X.cs" />
-    <Compile Include="SharpSid\components\sidtune\Buffer_sidtt.cs" />
-    <Compile Include="SharpSid\components\sidtune\PHeader.cs" />
-    <Compile Include="SharpSid\components\sidtune\PP20.cs" />
-    <Compile Include="SharpSid\components\sidtune\PSid.cs" />
-    <Compile Include="SharpSid\components\sidtune\SidTune.cs" />
-    <Compile Include="SharpSid\components\sidtune\SidTuneInfo.cs" />
-    <Compile Include="SharpSid\components\sidtune\SmartPtrBase_sidtt.cs" />
-    <Compile Include="SharpSid\components\sidtune\SmartPtr_sidtt.cs" />
-    <Compile Include="SharpSid\components\sid\NullSID.cs" />
-    <Compile Include="SharpSid\components\sid\resid\Coefficients.cs" />
-    <Compile Include="SharpSid\components\sid\resid\CycleCount.cs" />
-    <Compile Include="SharpSid\components\sid\resid\EnvelopeGenerator.cs" />
-    <Compile Include="SharpSid\components\sid\resid\ExternalFilter.cs" />
-    <Compile Include="SharpSid\components\sid\resid\FCPoints.cs" />
-    <Compile Include="SharpSid\components\sid\resid\Filter.cs" />
-    <Compile Include="SharpSid\components\sid\resid\memWave6581.cs" />
-    <Compile Include="SharpSid\components\sid\resid\memWave8580.cs" />
-    <Compile Include="SharpSid\components\sid\resid\PointPlotter.cs" />
-    <Compile Include="SharpSid\components\sid\resid\ReSID.cs" />
-    <Compile Include="SharpSid\components\sid\resid\SID.cs" />
-    <Compile Include="SharpSid\components\sid\resid\SIDDefs.cs" />
-    <Compile Include="SharpSid\components\sid\resid\sid_filter_t.cs" />
-    <Compile Include="SharpSid\components\sid\resid\InternalState.cs" />
-    <Compile Include="SharpSid\components\sid\resid\Voice.cs" />
-    <Compile Include="SharpSid\components\sid\resid\WaveformGenerator.cs" />
-    <Compile Include="SharpSid\components\sid\SIDEmu.cs" />
-    <Compile Include="SharpSid\components\sid\xsid\Channel.cs" />
-    <Compile Include="SharpSid\components\sid\xsid\XSID.cs" />
-    <Compile Include="SharpSid\InternalPlayer.cs" />
-    <Compile Include="SharpSid.Player.cs" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="gpl-2.0.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <PackageReference Include="NAudio" Version="1.10.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

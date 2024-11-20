@@ -141,69 +141,76 @@ namespace SharpSidPlayerForms
 
     private bool ReadHVSCSongLengthFile( string Filename )
     {
-      using ( var reader = System.IO.File.OpenText( Filename ) )
+      try
       {
-        string    line = reader.ReadLine();
-        if ( line != "[Database]" )
+        using ( var reader = System.IO.File.OpenText( Filename ) )
         {
-          return false;
-        }
-        while ( ( line = reader.ReadLine() ) != null )
-        {
-          if ( line.StartsWith( ";" ) )
+          string    line = reader.ReadLine();
+          if ( line != "[Database]" )
           {
-            // ; /DEMOS/0-9/10_Orbyte.sid
-            // 5f08a730b280e54fd1e75a7046b93fdc=1:17
-
-            string    relativeFilename = line.Substring( 1 ).Trim();
-
-            line = reader.ReadLine();
-            if ( line == null )
-            {
-              return false;
-            }
-            int     sepPos = line.IndexOf( '=' );
-            if ( sepPos == -1 )
-            {
-              return false;
-            }
-            string    hash = line.Substring( 0, sepPos ).ToUpper();
-            string    songDuration = line.Substring( sepPos + 1 );
-
-            string[]  durations = songDuration.Split( ' ' );
-            foreach ( var duration in durations )
-            {
-              int       minutes = 2;
-              int       seconds = 0;
-              int       milliseconds = 0;
-
-              // 1:12.779
-              int colonPos = duration.IndexOf( ':' );
-              if ( colonPos != -1 )
-              {
-                minutes = System.Convert.ToInt32( duration.Substring( 0, colonPos ) );
-                int   dotPos = duration.IndexOf( '.', colonPos );
-                if ( dotPos != -1 )
-                {
-                  seconds = System.Convert.ToInt32( duration.Substring( colonPos + 1, dotPos - colonPos - 1 ) );
-                  milliseconds = System.Convert.ToInt32( duration.Substring( dotPos + 1 ) );
-                }
-                else
-                {
-                  seconds = System.Convert.ToInt32( duration.Substring( colonPos + 1 ) );
-                }
-              }
-              if ( !_SongLengths.ContainsKey( hash ) )
-              {
-                _SongLengths.Add( hash, new List<TimeSpan>() );
-              }
-              _SongLengths[hash].Add( new TimeSpan( 0, 0, minutes, seconds, milliseconds ) );
-            }
+            return false;
           }
-          // ; /DEMOS/0-9/12345.sid
-          // 2727236ead44a62f0c6e01f6dd4dc484 =0:56
+          while ( ( line = reader.ReadLine() ) != null )
+          {
+            if ( line.StartsWith( ";" ) )
+            {
+              // ; /DEMOS/0-9/10_Orbyte.sid
+              // 5f08a730b280e54fd1e75a7046b93fdc=1:17
+
+              string    relativeFilename = line.Substring( 1 ).Trim();
+
+              line = reader.ReadLine();
+              if ( line == null )
+              {
+                return false;
+              }
+              int     sepPos = line.IndexOf( '=' );
+              if ( sepPos == -1 )
+              {
+                return false;
+              }
+              string    hash = line.Substring( 0, sepPos ).ToUpper();
+              string    songDuration = line.Substring( sepPos + 1 );
+
+              string[]  durations = songDuration.Split( ' ' );
+              foreach ( var duration in durations )
+              {
+                int       minutes = 2;
+                int       seconds = 0;
+                int       milliseconds = 0;
+
+                // 1:12.779
+                int colonPos = duration.IndexOf( ':' );
+                if ( colonPos != -1 )
+                {
+                  minutes = System.Convert.ToInt32( duration.Substring( 0, colonPos ) );
+                  int   dotPos = duration.IndexOf( '.', colonPos );
+                  if ( dotPos != -1 )
+                  {
+                    seconds = System.Convert.ToInt32( duration.Substring( colonPos + 1, dotPos - colonPos - 1 ) );
+                    milliseconds = System.Convert.ToInt32( duration.Substring( dotPos + 1 ) );
+                  }
+                  else
+                  {
+                    seconds = System.Convert.ToInt32( duration.Substring( colonPos + 1 ) );
+                  }
+                }
+                if ( !_SongLengths.ContainsKey( hash ) )
+                {
+                  _SongLengths.Add( hash, new List<TimeSpan>() );
+                }
+                _SongLengths[hash].Add( new TimeSpan( 0, 0, minutes, seconds, milliseconds ) );
+              }
+            }
+            // ; /DEMOS/0-9/12345.sid
+            // 2727236ead44a62f0c6e01f6dd4dc484 =0:56
+          }
+          return true;
         }
-        return true;
+      }
+      catch ( Exception )
+      {
+        return false;
       }
     }
 

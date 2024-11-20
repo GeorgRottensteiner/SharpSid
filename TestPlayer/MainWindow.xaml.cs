@@ -210,7 +210,7 @@ namespace TestPlayer
           {
             using ( Stream downloadStream = e.Result )
             {
-              downloadStream.CopyTo( mem );
+              CopyTo( downloadStream, mem );
             }
 
             mem.Position = 0;
@@ -254,6 +254,16 @@ namespace TestPlayer
     }
 
 
-
+    //it seems 81920 is the default size in CopyTo but this can be changed
+    public void CopyTo( Stream source, Stream destination, int bufferSize = 81920 )
+    {
+      byte[] array = new byte[bufferSize];
+      int count;
+      while ( ( count = source.Read( array, 0, array.Length ) ) != 0 )
+      {
+        destination.Write( array, 0, count );
+      }
+    }
   }
+
 }

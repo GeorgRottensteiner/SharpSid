@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>GeorgRottensteiner.SharpSid</id>
-    <version>0.9.0</version>
+    <version>0.9.2</version>
     <authors>Georg Rottensteiner</authors>
     <owners>grottensteiner</owners>
     <license type="expression">GPL-2.0-or-later</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C64 SID music player for PSID and raw files</description>
-    <copyright>Copyright ©2020 Georg Rottensteiner</copyright>
-    <releaseNotes>Added .NET 3.5 version</releaseNotes>
+    <copyright>©2020 - 2024 Georg Rottensteiner</copyright>
+    <releaseNotes>Added .NET 3.5, 6.0 and 8.0 version</releaseNotes>
     <tags>audio library c64 sid</tags>
     <dependencies>
       <group targetFramework="net35">
@@ -18,11 +18,19 @@
       <group targetFramework="net40">
         <dependency id="NAudio" version="1.10.0" />
       </group>
+      <group targetFramework="net60">
+        <dependency id="NAudio" version="1.10.0" />
+      </group>
+      <group targetFramework="net80">
+        <dependency id="NAudio" version="1.10.0" />
+      </group>
     </dependencies>
   </metadata>
   <files>
     <file src="gpl-2.0.txt" target="" />
-    <file src="bin/ReleaseNET40/v4.0/SharpSid.dll" target="lib/net40" />
-    <file src="bin/ReleaseNET35/v4.0/SharpSid.dll" target="lib/net35" />
+    <file src="bin/Release/net8.0/SharpSid.dll" target="lib/net80" />
+    <file src="bin/Release/net6.0/SharpSid.dll" target="lib/net60" />
+    <file src="bin/Release/net40/SharpSid.dll" target="lib/net40" />
+    <file src="bin/Release/net35/SharpSid.dll" target="lib/net35" />
   </files>
 </package>

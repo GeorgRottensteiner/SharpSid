@@ -728,7 +728,13 @@ namespace SharpSidPlayerForms
     {
       var formSettings = new FormSettings( _Settings );
 
-      formSettings.ShowDialog();
+      if ( formSettings.ShowDialog() == DialogResult.OK )
+      {
+        if ( ReadHVSCSongLengthFile( _Settings.HVSCLengthFile ) )
+        {
+          UpdateSongInfo();
+        }
+      }
     }
 
 
@@ -756,10 +762,13 @@ namespace SharpSidPlayerForms
         _SongInfosUpdated.Clear();
       }
 
+      listSongs.BeginUpdate();
       foreach ( var song in songsToUpdate )
       {
         song.Item.Text = song.PrettySongName + "/" + song.NumSongs;
       }
+      listSongs.Sort();
+      listSongs.EndUpdate();
     }
 
 

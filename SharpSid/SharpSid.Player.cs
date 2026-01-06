@@ -478,6 +478,12 @@ namespace SharpSid
       _CurrentTune.info.initAddr = InitialAddress;
       _CurrentTune.info.playAddr = InitialAddress;
       _CurrentTune.info.compatibility = SidTune.SIDTUNE_COMPATIBILITY_R64;
+
+      if ( InitialAddress == 0 )
+      {
+        _CurrentTune.info.compatibility = SidTune.SIDTUNE_COMPATIBILITY_BASIC;
+      }
+
       _CurrentTune.InjectProgramInMemory( byteData, DataStartAddress );
       _CurrentTune.status = true;
 

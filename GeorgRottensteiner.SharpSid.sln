@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlayer", "TestPlayer\TestPlayer.csproj", "{5472B893-2AEC-4663-BEE5-C59E8835DB45}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSid", "SharpSid\SharpSid.csproj", "{A0CCB485-382E-4230-A600-8A58734CF0BA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{04D193C2-A7E5-4782-ACFA-36D9AD6EC97D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSidPlayerForms", "SharpSidPlayerForms\SharpSidPlayerForms.csproj", "{8681EC2E-373C-4460-BE42-5B041A1DBF62}"
 EndProject
@@ -34,8 +37,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		    SolutionGuid = {A19453DB-3708-4937-ACAC-66F896D8DDCF}
-		        SolutionGuid = {4A141388-C9BB-467D-81E7-C9FFD5655B51}
 		SolutionGuid = {3E94B0E6-D5F5-4BAB-AABB-B9977311290F}
+		        SolutionGuid = {4A141388-C9BB-467D-81E7-C9FFD5655B51}
+		    SolutionGuid = {A19453DB-3708-4937-ACAC-66F896D8DDCF}
 	EndGlobalSection
 EndGlobal

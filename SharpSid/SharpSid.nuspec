@@ -8,9 +8,10 @@
     <license type="expression">GPL-2.0-or-later</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C64 SID music player for PSID and raw files</description>
-    <copyright>©2020 - 2025 Georg Rottensteiner</copyright>
+    <copyright>©2020 - 2026 Georg Rottensteiner</copyright>
     <releaseNotes>Added .NET 3.5, 6.0, 8.0 and 10.0 version</releaseNotes>
     <tags>audio library c64 sid</tags>
+    <readme>docs\README.md</readme>
     <dependencies>
       <group targetFramework="net35">
         <dependency id="NAudio" version="1.10.0" />
@@ -18,10 +19,10 @@
       <group targetFramework="net40">
         <dependency id="NAudio" version="1.10.0" />
       </group>
-      <group targetFramework="net60">
+      <group targetFramework="net6.0">
         <dependency id="NAudio" version="1.10.0" />
       </group>
-      <group targetFramework="net80">
+      <group targetFramework="net8.0">
         <dependency id="NAudio" version="1.10.0" />
       </group>
       <group targetFramework="net10.0">
